@@ -1,0 +1,35 @@
+version: '3'
+services:
+    mysql:
+        image: mysql:8.0
+        container_name: strapi_mysql
+        environment:
+            MYSQL_DATABASE: ${DB_NAME}
+            MYSQL_USER: ${DB_USER}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        ports:
+            - '${DB_PORT}:3306'
+        volumes:
+            - ./mysql_data:/var/lib/mysql
+        networks:
+            - strapi-network
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: strapi_phpmyadmin
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: ${DB_PORT}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        ports:
+            - '8080:80'
+        networks:
+            - strapi-network
+
+volumes:
+    mysql-data:
+
+networks:
+    strapi-network:
+        driver: bridge
