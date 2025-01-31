@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sales",
+  "info": {
+    "singularName": "sale",
+    "pluralName": "sales",
+    "displayName": "Sale",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "date": {
+      "type": "datetime",
+      "required": true
+    },
+    "total": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "payment_method": {
+      "type": "enumeration",
+      "enum": [
+        "Efectivo",
+        "Tarjeta"
+      ],
+      "required": true
+    },
+    "sale_details": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::sale-detail.sale-detail"
+    }
+  }
+}

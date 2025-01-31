@@ -362,6 +362,183 @@ export interface AdminUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiCashRegisterCashRegister extends Schema.CollectionType {
+  collectionName: 'cash_registers';
+  info: {
+    displayName: 'cash_register';
+    pluralName: 'cash-registers';
+    singularName: 'cash-register';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    closing_date: Attribute.DateTime & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::cash-register.cash-register',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    final_amount: Attribute.Decimal &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    initial_amount: Attribute.Decimal &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    opening_date: Attribute.DateTime & Attribute.Required;
+    publishedAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::cash-register.cash-register',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiProductProduct extends Schema.CollectionType {
+  collectionName: 'products';
+  info: {
+    displayName: 'Product';
+    pluralName: 'products';
+    singularName: 'product';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    category: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'stock'>;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::product.product',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    descripion: Attribute.Text;
+    image: Attribute.Media<'images', true>;
+    name: Attribute.String & Attribute.Required;
+    price: Attribute.Decimal & Attribute.Required;
+    publishedAt: Attribute.DateTime;
+    stock: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::product.product',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSaleDetailSaleDetail extends Schema.CollectionType {
+  collectionName: 'sale_details';
+  info: {
+    displayName: 'sale_detail';
+    pluralName: 'sale-details';
+    singularName: 'sale-detail';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    amount: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::sale-detail.sale-detail',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    product: Attribute.Relation<
+      'api::sale-detail.sale-detail',
+      'oneToOne',
+      'api::product.product'
+    >;
+    publishedAt: Attribute.DateTime;
+    sale: Attribute.Relation<
+      'api::sale-detail.sale-detail',
+      'oneToOne',
+      'api::sale.sale'
+    >;
+    subtotal: Attribute.Decimal;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::sale-detail.sale-detail',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSaleSale extends Schema.CollectionType {
+  collectionName: 'sales';
+  info: {
+    description: '';
+    displayName: 'Sale';
+    pluralName: 'sales';
+    singularName: 'sale';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::sale.sale', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    date: Attribute.DateTime & Attribute.Required;
+    payment_method: Attribute.Enumeration<['Efectivo', 'Tarjeta']> &
+      Attribute.Required;
+    publishedAt: Attribute.DateTime;
+    sale_details: Attribute.Relation<
+      'api::sale.sale',
+      'oneToMany',
+      'api::sale-detail.sale-detail'
+    >;
+    total: Attribute.Decimal &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<'api::sale.sale', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease extends Schema.CollectionType {
   collectionName: 'strapi_releases';
   info: {
@@ -798,6 +975,10 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::cash-register.cash-register': ApiCashRegisterCashRegister;
+      'api::product.product': ApiProductProduct;
+      'api::sale-detail.sale-detail': ApiSaleDetailSaleDetail;
+      'api::sale.sale': ApiSaleSale;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
